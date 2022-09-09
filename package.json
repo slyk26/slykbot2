@@ -11,9 +11,11 @@
   "author": "slyk26",
   "license": "ISC",
   "dependencies": {
+    "catbox.moe": "^1.0.2",
     "discord.js": "^14.3.0",
     "dotenv": "^16.0.2",
-    "snoostorm": "^1.5.2"
+    "snoostorm": "^1.5.2",
+    "url-file-size": "^1.0.4"
   },
   "devDependencies": {
     "@types/node": "^18.7.16",
