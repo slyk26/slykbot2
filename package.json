@@ -1,0 +1,27 @@
+{
+  "name": "slykbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "debug": "nodemon -r dotenv/config src/index.ts",
+    "start": "ts-node -r dotenv/config src/index.ts"
+  },
+  "keywords": [],
+  "author": "slyk26",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.3.0",
+    "dotenv": "^16.0.2",
+    "snoostorm": "^1.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.16",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "@typescript-eslint/parser": "^5.36.2",
+    "eslint": "^8.23.0",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.3"
+  }
+}
