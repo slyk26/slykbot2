@@ -1,4 +1,4 @@
-import Snoowrap, { Submission, Listing } from 'snoowrap';
+import Snoowrap, { Submission } from 'snoowrap';
 import { ApiResponse, ResponseType } from './ApiResponse';
 import config from './config.json';
 import ufs from 'url-file-size';
@@ -22,9 +22,8 @@ function fetchOneRandomFrom(subreddit: string) {
 		reddit.getRandomSubmission(subreddit).then((response) => {
 			// /random uri is disabled
 			if (response.constructor.name !== 'Submission') {
-				logger.info(response);
 				logger.warn('using fallback manual random search');
-				let listingPromise: Promise<Listing<Submission>> = Promise.reject();
+				let listingPromise = reddit.getHot(subreddit);
 
 				switch (Number.parseInt('' + Math.random() * 5)) {
 				case 0:
@@ -45,7 +44,7 @@ function fetchOneRandomFrom(subreddit: string) {
 				}
 
 				listingPromise.then(listing => {
-					if (listing. length > 0) {
+					if (listing.length > 0) {
 						resolve(listing[Number.parseInt('' + Math.random() * listing.length)]);
 					}
 					else {

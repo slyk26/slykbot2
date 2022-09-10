@@ -8,6 +8,7 @@ export default (client: Client): void => {
 	client.on('interactionCreate', (interaction: Interaction) => {
 		if (interaction.isCommand() || interaction.isContextMenuCommand()) {
 			handleSlashCommand(client, interaction).catch(e => {
+				logger.error('ineraction failed');
 				logger.error(e);
 			});
 		}
@@ -20,5 +21,5 @@ const handleSlashCommand = async (client: Client, interaction: CommandInteractio
 		return;
 	}
 	await interaction.deferReply();
-	process.nextTick(() => command.run(client, interaction));
+	command.run(client, interaction);
 };
