@@ -1,10 +1,15 @@
 import { CommandInteraction, Client, Interaction } from 'discord.js';
 import { SlashCommands } from '../commands/SlashCommands';
+import { getLoggerFor } from '../utils/logger';
+
+const logger = getLoggerFor('interactionCreate');
 
 export default (client: Client): void => {
-	client.on('interactionCreate', async (interaction: Interaction) => {
+	client.on('interactionCreate', (interaction: Interaction) => {
 		if (interaction.isCommand() || interaction.isContextMenuCommand()) {
-			await handleSlashCommand(client, interaction);
+			handleSlashCommand(client, interaction).catch(e => {
+				logger.error(e);
+			});
 		}
 	});
 };
@@ -15,5 +20,5 @@ const handleSlashCommand = async (client: Client, interaction: CommandInteractio
 		return;
 	}
 	await interaction.deferReply();
-	command.run(client, interaction);
+	process.nextTick(() => command.run(client, interaction));
 };

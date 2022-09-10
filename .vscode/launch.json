@@ -2,10 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "command": "npm run debug",
-            "name": "Debug Bot",
+            "type": "node",
             "request": "launch",
-            "type": "node-terminal"
-        }
+            "name": "Debug Bot",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "debug"],
+            "outputCapture": "std",
+            "env": { "NODE_ENV": "development"  },
+        },
     ]
 }

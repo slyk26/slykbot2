@@ -14,16 +14,13 @@ export const Reddit: Command = {
 
 
 		if (option && typeof option.value === 'string') {
-			subreddit = option.value;
+			// dont allow whitespaces
+			subreddit = option.value.split(' ')[0];
 		}
 
 		getRandomPost(subreddit).then(async response => {
 			await interaction.followUp({
 				content: formatMessage(response),
-			});
-		}).catch(async e => {
-			await interaction.followUp({
-				content: '' + e,
 			});
 		});
 	},
