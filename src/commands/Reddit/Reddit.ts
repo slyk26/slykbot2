@@ -40,19 +40,22 @@ export const Reddit: Command = {
 function formatMessage(response: ApiResponse) {
 	let message = '';
 	switch (response.type) {
-	case ResponseType.TEXT: case ResponseType.ERROR:
-		message = `:pencil2: ${response.title} \n\n ${response.content} `;
+	case ResponseType.ERROR:
+		message = `:moyai: ${response.title} \n ${response.content}`;
+		break;
+	case ResponseType.TEXT:
+		message = `:pencil2: ${response.title} \n\n ${response.content}`;
 		break;
 	case ResponseType.IMAGE: case ResponseType.GIF: case ResponseType.VIDEO:
 		message = `:camera_with_flash: [ ${response.title}](${response.content})`;
 		break;
 	case ResponseType.WEBSITE:
-		message = `:desktop: [ ${response.title}](${response.content})`;
+		message = `:link: [ ${response.title}](${response.content})`;
 		break;
 	case ResponseType.GALLERY:
-		message += ':open_file_folder:' + response.title + '\n';
+		message += ':open_file_folder: ' + response.title + '\n';
 		for (let i = 0;i < response.content.length;i++) {
-			message += `[[Img  ${i}]](${response.content[i]}) `;
+			message += `[[Img  ${i}]](${response.content[i]})`;
 		}
 		if (response.content.length > 5) {
 			message = `:nerd: Too many images (${response.content.length}/5) in Gallery >> [Original Link](${response.src})`;

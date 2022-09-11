@@ -6,7 +6,10 @@
   "scripts": {
     "debug": "nodemon -r dotenv/config src/index.ts",
     "compile": "tsc",
-    "start": "tsc && node -r dotenv/config dist/index.js"
+    "deploy": "tsc && pm2 start dist/index.js --name slykbot --node-args=\"-r dotenv/config\"",
+    "start": "pm2 start slykbot",
+    "stop": "pm2 stop slykbot",
+    "delete": "pm2 delete slykbot"
   },
   "keywords": [],
   "author": "slyk26",
@@ -15,6 +18,7 @@
     "catbox.moe": "^1.0.2",
     "discord.js": "^14.3.0",
     "dotenv": "^16.0.2",
+    "pm2": "^5.2.0",
     "snoostorm": "^1.5.2",
     "url-file-size": "^1.0.4",
     "winston": "^3.8.2"
