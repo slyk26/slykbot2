@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "debug": "nodemon -r dotenv/config src/index.ts",
+    "compile": "tsc",
     "start": "tsc && node -r dotenv/config dist/index.js"
   },
   "keywords": [],

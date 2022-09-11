@@ -250,11 +250,11 @@ function prepareResult(response: ApiResponse) {
 	return new Promise<ApiResponse>((resolve) => {
 		if (typeof response.content === 'string' && response.content.startsWith(config.mediaFolder)) {
 			// if is downloaded file (currently only mp4) => upload
-			logger.debug(`response needs to be uploaded (id: ${response.id}) (file: ${response.content})`);
+			logger.debug(`response needs to be uploaded (id: ${response.id}) (${response.content})`);
 			resolve(upload(response));
 		}
 		else {
-			logger.debug(`response can be sent directly (id: ${response.id}) (url: ${response.content})`);
+			logger.debug(`response can be sent directly (id: ${response.id}) (${response.content})`);
 			resolve(response);
 		}
 	});

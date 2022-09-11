@@ -19,9 +19,12 @@ export const Reddit: Command = {
 		}
 
 		getRandomPost(subreddit).then(async response => {
-			await interaction.followUp({
+			const message = await interaction.followUp({
 				content: formatMessage(response),
 			});
+
+			message.react('⬆️');
+			message.react('⬇️');
 		});
 	},
 	options: [
@@ -36,27 +39,29 @@ export const Reddit: Command = {
 
 function formatMessage(response: ApiResponse) {
 	let message = '';
-
 	switch (response.type) {
 	case ResponseType.TEXT: case ResponseType.ERROR:
-		message = `[${response.type}] ${response.title} \n\n ${response.content} `;
+		message = `:pencil2: ${response.title} \n\n ${response.content} `;
 		break;
-	case ResponseType.IMAGE: case ResponseType.GIF: case ResponseType.VIDEO: case ResponseType.WEBSITE:
-		message = `[${response.type}] [ ${response.title}](${response.content})`;
+	case ResponseType.IMAGE: case ResponseType.GIF: case ResponseType.VIDEO:
+		message = `:camera_with_flash: [ ${response.title}](${response.content})`;
+		break;
+	case ResponseType.WEBSITE:
+		message = `:desktop: [ ${response.title}](${response.content})`;
 		break;
 	case ResponseType.GALLERY:
-		message += '[Gallery]' + response.title + '\n';
+		message += ':open_file_folder:' + response.title + '\n';
 		for (let i = 0;i < response.content.length;i++) {
 			message += `[[Img  ${i}]](${response.content[i]}) `;
 		}
 		if (response.content.length > 5) {
-			message = `[Gallery] Too many images (${response.content.length}/5) in Gallery >> [Original Link](${response.src})`;
+			message = `:nerd: Too many images (${response.content.length}/5) in Gallery >> [Original Link](${response.src})`;
 		}
 		break;
 	}
 
 	if (message.length > 2000) {
-		message = `[Info] Message body too long [${[message.length]}/2000] >> [Original Link](${response.src})`;
+		message = `:nerd: Message body too long [${[message.length]}/2000] >> [Original Link](${response.src})`;
 	}
 
 	return message;
