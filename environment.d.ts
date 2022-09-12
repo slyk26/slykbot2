@@ -1,9 +1,12 @@
 declare global {
     namespace NodeJS {
       interface ProcessEnv {
-        // discord
+        // discord bot
         APPLICATION_ID: number;
         DISCORD_TOKEN: string;
+        // dev bot
+        DEV_APPLICATION_ID: number;
+        DEV_DISCORD_TOKEN: string;
         // reddit
         REDDIT_CLIENT_ID: string;
         REDDIT_CLIENT_SECRET: string;

@@ -1,13 +1,12 @@
 import { Client } from 'discord.js';
 import { SlashCommands } from '../commands/SlashCommands';
-import { getLoggerFor } from '../utils/logger';
+import { getLoggerFor } from '../utils/Logger';
 import { prepareReddit } from '../commands/Reddit/api';
 
 const logger = getLoggerFor('client');
 
 export default (client: Client): void => {
 	logger.info('starting up...');
-
 	client.once('ready', () => {
 		if (!client.user || !client.application) {
 			logger.error('client has missing properties: client.user | client.application');

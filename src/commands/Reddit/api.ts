@@ -5,7 +5,7 @@ import ufs from 'url-file-size';
 import * as fs from 'fs';
 import * as https from 'https';
 import Catbox = require('catbox.moe');
-import { getLoggerFor } from '../../utils/logger';
+import { getLoggerFor } from '../../utils/Logger';
 
 const logger = getLoggerFor('/reddit');
 
