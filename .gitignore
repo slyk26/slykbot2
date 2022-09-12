@@ -1,4 +1,6 @@
 .env
+.env.*
+data/
 node_modules/
 dist/
 reddit_media/

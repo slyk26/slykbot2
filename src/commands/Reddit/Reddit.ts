@@ -2,8 +2,10 @@ import { CommandInteraction, Client, ApplicationCommandType, ApplicationCommandO
 import { Command } from '../Command';
 import { getRandomPost } from './api';
 import { ApiResponse, ResponseType } from './ApiResponse';
+import redditTable from '../../database/table/RedditTable';
 
 export const Reddit: Command = {
+	ephermal: false,
 	name: 'reddit',
 	description: 'returns a post from a subreddit',
 	type: ApplicationCommandType.ChatInput,
@@ -18,14 +20,21 @@ export const Reddit: Command = {
 			subreddit = option.value.split(' ')[0];
 		}
 
-		getRandomPost(subreddit).then(async response => {
-			const message = await interaction.followUp({
-				content: formatMessage(response),
+		if (interaction.guildId && redditTable.get(interaction.guildId).subredditBlacklist.includes(subreddit.toLocaleLowerCase())) {
+			await interaction.followUp({
+				content: formatMessage(new ApiResponse('-1', 'got blacked', `r/${subreddit} is blacklisted`, ResponseType.ERROR, '')),
 			});
+		}
+		else {
+			getRandomPost(subreddit).then(async response => {
+				const message = await interaction.followUp({
+					content: formatMessage(response),
+				});
 
-			message.react('⬆️');
-			message.react('⬇️');
-		});
+				message.react('⬆️');
+				message.react('⬇️');
+			});
+		}
 	},
 	options: [
 		{

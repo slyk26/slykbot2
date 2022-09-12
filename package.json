@@ -18,6 +18,7 @@
     "catbox.moe": "^1.0.2",
     "discord.js": "^14.3.0",
     "dotenv": "^16.0.2",
+    "enmap": "^5.9.1",
     "pm2": "^5.2.0",
     "snoostorm": "^1.5.2",
     "url-file-size": "^1.0.4",
