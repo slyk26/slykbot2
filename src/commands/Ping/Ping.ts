@@ -1,5 +1,5 @@
 import { CommandInteraction, Client, ApplicationCommandType } from 'discord.js';
-import { Command } from '../Command';
+import { Command } from '../../utils/Command';
 
 export const Ping: Command = {
 	ephermal: true,

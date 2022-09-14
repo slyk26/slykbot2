@@ -1,5 +1,5 @@
 import { CommandInteraction, Client, ApplicationCommandType, ApplicationCommandOptionType } from 'discord.js';
-import { Command } from '../Command';
+import { Command } from '../../utils/Command';
 import { getRandomPost } from './api';
 import { ApiResponse, ResponseType } from './ApiResponse';
 import redditTable from '../../database/table/RedditTable';
@@ -64,7 +64,7 @@ function formatMessage(response: ApiResponse) {
 	case ResponseType.GALLERY:
 		message += ':open_file_folder: ' + response.title + '\n';
 		for (let i = 0;i < response.content.length;i++) {
-			message += `[[Img  ${i}]](${response.content[i]})`;
+			message += `[[Img  ${i}]](${response.content[i]}) `;
 		}
 		if (response.content.length > 5) {
 			message = `:nerd: Too many images (${response.content.length}/5) in Gallery >> [Original Link](${response.src})`;
