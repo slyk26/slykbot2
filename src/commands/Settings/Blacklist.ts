@@ -22,7 +22,7 @@ export const Blacklist: Command = {
 
 		if (serverId) {
 			const member = interaction.member as GuildMember;
-			const isAdmin = member.permissions.has(PermissionFlagsBits.Administrator);
+			const isAdmin = member.permissions.has(PermissionFlagsBits.ModerateMembers);
 
 			if (!isAdmin) {
 				logger.debug(`${member.displayName} is not an admin`);
