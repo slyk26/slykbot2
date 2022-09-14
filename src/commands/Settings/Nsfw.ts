@@ -20,12 +20,12 @@ export const Nsfw: Command = {
 
 		if (serverId) {
 			const member = interaction.member as GuildMember;
-			const isAdmin = member.permissions.has(PermissionFlagsBits.ModerateMembers);
+			const isMod = member.permissions.has(PermissionFlagsBits.ModerateMembers);
 
-			if (!isAdmin) {
-				logger.debug(`${member.displayName} is not an admin`);
+			if (!isMod) {
+				logger.debug(`${member.displayName} is not a mod`);
 				await interaction.followUp({
-					content: 'Settings are only for Admins',
+					content: 'Settings are only for Admins/Mods',
 				});
 				return;
 			}
