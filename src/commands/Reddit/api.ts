@@ -1,11 +1,14 @@
 import Snoowrap, { Submission } from 'snoowrap';
-import { ApiResponse, ResponseType } from './ApiResponse';
 import config from './config.json';
 import ufs from 'url-file-size';
 import * as fs from 'fs';
 import * as https from 'https';
 import Catbox = require('catbox.moe');
 import { getLoggerFor } from '../../utils/Logger';
+import { ApiResponse, ResponseType } from './ApiResponse';
+import redditTable from '../../database/table/RedditTable';
+import nsfwTable from '../../database/table/NsfwTable';
+import NsfwRecord from '../../database/record/NsfwRecord';
 
 const logger = getLoggerFor('/reddit');
 
@@ -17,7 +20,7 @@ const reddit = new Snoowrap({
 	clientSecret: process.env.REDDIT_CLIENT_SECRET,
 	refreshToken: process.env.REDDIT_REFRESH_TOKEN });
 
-function fetchOneRandomFrom(subreddit: string) {
+function fetchOneRandom(subreddit: string) {
 	return new Promise<Submission>((resolve, reject) => {
 		reddit.getRandomSubmission(subreddit).then((response) => {
 			// /random uri is disabled
@@ -45,7 +48,8 @@ function fetchOneRandomFrom(subreddit: string) {
 
 				listingPromise.then(listing => {
 					if (listing.length > 0) {
-						resolve(listing[Number.parseInt('' + Math.random() * listing.length)]);
+						const submission = listing[Number.parseInt('' + Math.random() * listing.length)];
+						resolve(submission);
 					}
 					else {
 						logger.warn('no posts found on /r' + subreddit);
@@ -261,21 +265,36 @@ function prepareResult(response: ApiResponse) {
 }
 
 // fetch process in a promise chain
-export function getRandomPost(subreddit: string) {
+export function getRandomPost(serverId: string | null, subreddit: string) {
+	subreddit = subreddit.toLocaleLowerCase();
 	return new Promise<ApiResponse>(resolve => {
-		fetchOneRandomFrom(subreddit)
-			.then(processSubmission)
-			.then(prepareResult)
-			.then(response => {
-				if (response.content.includes('database error')) {
-					// retry on catbox error
-					logger.warn(`invalid upload response: retrying (id: ${response.id})`);
-					getRandomPost(subreddit);
+		checkSettings(serverId, subreddit)
+			.then(checkIfNsfw).then(isNsfw => {
+				// if nsfw and new => add it to the db
+				if (isNsfw && !nsfwTable.has(subreddit)) {
+					logger.info(`adding ${subreddit} to the nsfw table`);
+					nsfwTable.set(subreddit, new NsfwRecord(serverId ? serverId : 'DM', new Date()));
 				}
-				resolve(response);
+
+				if (serverId && redditTable.get(serverId).nsfw) {
+					resolve(new ApiResponse('-1', '', 'nsfw subreddits are not allowed', ResponseType.ERROR, 'sourceCode'));
+				}
+
+				fetchOneRandom(subreddit)
+					.then(processSubmission)
+					.then(prepareResult)
+					.then(response => {
+						if (response.content.includes('database error')) {
+							// retry on catbox error
+							logger.warn(`invalid upload response: retrying (id: ${response.id})`);
+							getRandomPost(serverId, subreddit);
+						}
+						resolve(response);
+					});
 			}).catch(e => {
-				resolve(new ApiResponse('-1', '', e, ResponseType.ERROR, 'intern'));
+				resolve(new ApiResponse('-1', '', e, ResponseType.ERROR, 'sourceCode'));
 			});
+
 	});
 }
 
@@ -297,4 +316,41 @@ export function prepareReddit() {
 		fs.unlinkSync(config.mediaFolder + file);
 	});
 	files.length ? logger.info(`deleted ${files.length} orphaned files`) : null;
+}
+
+function checkSettings(serverId: string | null, subreddit: string) {
+	return new Promise<string>((resolve, reject) => {
+		if (serverId) {
+			const redditRecord = redditTable.get(serverId);
+			if (redditRecord.subredditBlacklist.includes(subreddit.toLocaleLowerCase())) {
+				logger.debug(`${serverId}: subreddit r/${subreddit} is blacklisted`);
+				reject(`r/${subreddit} is blacklisted`);
+			}
+			if (redditRecord.nsfw && nsfwTable.has(subreddit)) {
+				logger.debug(`subreddit r/${subreddit} is nsfw`);
+				reject('nsfw subreddits are not allowed');
+			}
+		}
+		resolve(subreddit);
+	});
+}
+
+
+// not to me: snoowrap is inconsistent
+// getSubreddit() only returns displayName => check yourself
+function checkIfNsfw(subreddit: string) {
+	return new Promise<boolean>((resolve, reject) => {
+		https.get(`https://www.reddit.com/r/${subreddit}/about.json`, res => {
+			let body = '';
+			res.on('data', function(chunk) {
+				body += chunk;
+			});
+			res.on('end', function() {
+				resolve(JSON.parse(body).data.over18);
+			});
+			res.on('error', () => {
+				reject('couldn\'t check subreddit status');
+			});
+		});
+	});
 }

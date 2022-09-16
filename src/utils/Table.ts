@@ -16,19 +16,19 @@ export default abstract class Table<T> {
 		});
 	}
 
-	get(serverId: string): T {
-		return this.table.get(serverId);
+	get(key: string): T {
+		return this.table.get(key);
 	}
 
-	has(serverId: string): boolean {
-		return this.table.has(serverId);
+	has(key: string): boolean {
+		return this.table.has(key);
 	}
 
-	set(serverId: string, value: T) {
-		return this.table.set(serverId, value);
+	set(key: string, value: T) {
+		return this.table.set(key, value);
 	}
 
-	delete(serverId: string) {
-		return this.table.delete(serverId);
+	delete(key: string) {
+		return this.table.delete(key);
 	}
 }

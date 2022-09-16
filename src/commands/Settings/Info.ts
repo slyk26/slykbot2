@@ -12,12 +12,13 @@ export const Info: Command = {
 	description: 'shows the config of this server',
 	type: ApplicationCommandType.ChatInput,
 	run: async (client: Client, interaction: CommandInteraction) => {
-		if (!interaction.isChatInputCommand() || !interaction.guild || !interaction) return;
+		if (!interaction.isChatInputCommand()) return;
 
 		const serverId = interaction.guildId;
 		let content = 'nothing happened';
+		logger.debug('serverId: ' + serverId);
 
-		if (serverId) {
+		if (serverId && interaction.guild) {
 			const member = interaction.member as GuildMember;
 			const isMod = member.permissions.has(PermissionFlagsBits.ModerateMembers);
 

@@ -36,7 +36,7 @@ export const Nsfw: Command = {
 			}
 			const record = redditTable.get(serverId);
 
-			record.nsfw = !!getValueOfOption(interaction.options.data, ['nsfw', 'filter']);
+			record.nsfw = !!getValueOfOption(interaction.options.data, ['filter']);
 			redditTable.set(serverId, record);
 			content = 'nsfw filtering changed to: ' + record.nsfw;
 			logger.debug(content);
@@ -52,18 +52,10 @@ export const Nsfw: Command = {
 
 	options: [
 		{
-			type: ApplicationCommandOptionType.Subcommand,
-			name: 'nsfw',
-			description: 'toggle to filter nsfw subreddits',
-
-			options: [
-				{
-					type: ApplicationCommandOptionType.Boolean,
-					name: 'filter',
-					description: 'filter nsfw',
-					required: true,
-				},
-			],
+			type: ApplicationCommandOptionType.Boolean,
+			name: 'filter',
+			description: 'filter nsfw',
+			required: true,
 		},
 	],
 };
