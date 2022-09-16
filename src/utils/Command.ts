@@ -1,4 +1,4 @@
-import { CommandInteraction, ChatInputApplicationCommandData, Client } from 'discord.js';
+import { ChatInputApplicationCommandData, Client, CommandInteraction } from 'discord.js';
 
 export interface Command extends ChatInputApplicationCommandData {
     ephermal: boolean;

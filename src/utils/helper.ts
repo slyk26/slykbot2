@@ -1,4 +1,4 @@
-import { CommandInteractionOption, CacheType } from 'discord.js';
+import { CacheType, CommandInteractionOption } from 'discord.js';
 
 // recursive function to get value of an option inside a option chain
 // fails if the keys dont match the option names
