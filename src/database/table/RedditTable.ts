@@ -1,5 +1,5 @@
-import RedditRecord from '../record/RedditRecord';
 import Table from '../../utils/Table';
+import RedditRecord from '../record/RedditRecord';
 
 // key => serverId
 class RedditTable extends Table<RedditRecord> {

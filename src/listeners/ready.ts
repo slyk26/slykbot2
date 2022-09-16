@@ -1,7 +1,7 @@
 import { Client } from 'discord.js';
+import { prepareReddit } from '../commands/Reddit/api';
 import { SlashCommands } from '../commands/SlashCommands';
 import { getLoggerFor } from '../utils/Logger';
-import { prepareReddit } from '../commands/Reddit/api';
 
 const logger = getLoggerFor('client');
 

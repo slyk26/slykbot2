@@ -1,4 +1,4 @@
-import { CommandInteraction, Client, ApplicationCommandType } from 'discord.js';
+import { ApplicationCommandType, Client, CommandInteraction } from 'discord.js';
 import { Command } from '../../utils/Command';
 
 export const Ping: Command = {

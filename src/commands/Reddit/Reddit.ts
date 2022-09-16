@@ -1,4 +1,4 @@
-import { CommandInteraction, Client, ApplicationCommandType, ApplicationCommandOptionType } from 'discord.js';
+import { ApplicationCommandOptionType, ApplicationCommandType, Client, CommandInteraction } from 'discord.js';
 import { Command } from '../../utils/Command';
 import { getRandomPost } from './api';
 

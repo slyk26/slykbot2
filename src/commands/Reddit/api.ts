@@ -272,7 +272,7 @@ export function getRandomPost(serverId: string | null, subreddit: string) {
 					nsfwTable.set(subreddit, new NsfwRecord(serverId ? serverId : 'DM', new Date()));
 				}
 
-				if (serverId && isNsfw) {
+				if (serverId && redditTable.get(serverId).nsfw === true) {
 					resolve(new ApiResponse('-1', 'nsfw subreddits are not allowed', '', ResponseType.ERROR, 'sourceCode'));
 				}
 
@@ -344,9 +344,7 @@ function checkIfNsfw(subreddit: string) {
 			res.on('end', function() {
 				// checking if subreddit exists
 				if (!body.includes('The resource was found at')) {
-					const isOver18 = JSON.parse(body).data.over18;
-					console.log(isOver18);
-					resolve(isOver18);
+					resolve(JSON.parse(body).data.over18);
 				}
 				else {
 					reject('subreddit doesn\'t exist');

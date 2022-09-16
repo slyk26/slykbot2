@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
-import ready from './listeners/ready';
-import interactionCreate from './listeners/interactionCreate';
 import guildDelete from './listeners/guildDelete';
+import interactionCreate from './listeners/interactionCreate';
+import ready from './listeners/ready';
 const client = new Client({ partials: [Partials.Channel], intents: [GatewayIntentBits.Guilds] });
 
 // event listeners

@@ -1,4 +1,4 @@
-import { CommandInteraction, Client, Interaction } from 'discord.js';
+import { Client, CommandInteraction, Interaction } from 'discord.js';
 import { SlashCommands } from '../commands/SlashCommands';
 import { getLoggerFor } from '../utils/Logger';
 

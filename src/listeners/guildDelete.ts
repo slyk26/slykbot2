@@ -1,6 +1,6 @@
 import { Client, Guild } from 'discord.js';
-import { getLoggerFor } from '../utils/Logger';
 import redditTable from '../database/table/RedditTable';
+import { getLoggerFor } from '../utils/Logger';
 
 const logger = getLoggerFor('guildDelete');
 
