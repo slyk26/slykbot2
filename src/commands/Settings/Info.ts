@@ -38,7 +38,7 @@ export const Info: Command = {
 
 			content = `[${interaction.guild.name}] \n`;
 			content += `Blacklisted Subreddits: ${record.subredditBlacklist}\n`;
-			content += `NSFW Posts allowed: ${record.nsfw}`;
+			content += `filtering nsfw posts: ${record.nsfw}`;
 			logger.debug(content);
 		}
 		else {

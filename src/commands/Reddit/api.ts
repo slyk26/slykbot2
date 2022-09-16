@@ -47,14 +47,10 @@ function fetchOneRandom(subreddit: string) {
 				}
 
 				listingPromise.then(listing => {
-					if (listing.length > 0) {
-						const submission = listing[Number.parseInt('' + Math.random() * listing.length)];
-						resolve(submission);
-					}
-					else {
-						logger.warn('no posts found on /r' + subreddit);
-						reject('no posts found on r/' + subreddit);
-					}
+					const submission = listing[Number.parseInt('' + Math.random() * listing.length)];
+					resolve(submission);
+
+
 				}).catch(reject);
 			}
 			else {
@@ -276,8 +272,8 @@ export function getRandomPost(serverId: string | null, subreddit: string) {
 					nsfwTable.set(subreddit, new NsfwRecord(serverId ? serverId : 'DM', new Date()));
 				}
 
-				if (serverId && redditTable.get(serverId).nsfw) {
-					resolve(new ApiResponse('-1', '', 'nsfw subreddits are not allowed', ResponseType.ERROR, 'sourceCode'));
+				if (serverId && isNsfw) {
+					resolve(new ApiResponse('-1', 'nsfw subreddits are not allowed', '', ResponseType.ERROR, 'sourceCode'));
 				}
 
 				fetchOneRandom(subreddit)
@@ -292,7 +288,7 @@ export function getRandomPost(serverId: string | null, subreddit: string) {
 						resolve(response);
 					});
 			}).catch(e => {
-				resolve(new ApiResponse('-1', '', e, ResponseType.ERROR, 'sourceCode'));
+				resolve(new ApiResponse('-1', e, '', ResponseType.ERROR, 'sourceCode'));
 			});
 
 	});
@@ -346,7 +342,15 @@ function checkIfNsfw(subreddit: string) {
 				body += chunk;
 			});
 			res.on('end', function() {
-				resolve(JSON.parse(body).data.over18);
+				// checking if subreddit exists
+				if (!body.includes('The resource was found at')) {
+					const isOver18 = JSON.parse(body).data.over18;
+					console.log(isOver18);
+					resolve(isOver18);
+				}
+				else {
+					reject('subreddit doesn\'t exist');
+				}
 			});
 			res.on('error', () => {
 				reject('couldn\'t check subreddit status');
