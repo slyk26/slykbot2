@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType, ApplicationCommandType, Client, CommandInteraction } from 'discord.js';
 import { Command } from '../../utils/Command';
 import { getRandomPost } from './api';
+import { ResponseType } from './ApiResponse';
 
 export const Reddit: Command = {
 	ephermal: false,
@@ -22,8 +23,10 @@ export const Reddit: Command = {
 				content: response.getFormattedResponse(),
 			});
 
-			message.react('⬆️');
-			message.react('⬇️');
+			if (response.type !== ResponseType.ERROR) {
+				message.react('⬆️');
+				message.react('⬇️');
+			}
 		});
 
 	},

@@ -286,6 +286,8 @@ export function getRandomPost(serverId: string | null, subreddit: string) {
 							getRandomPost(serverId, subreddit);
 						}
 						resolve(response);
+					}).catch(e => {
+						resolve(new ApiResponse('-1', e, '', ResponseType.ERROR, 'sourceCode'));
 					});
 			}).catch(e => {
 				resolve(new ApiResponse('-1', e, '', ResponseType.ERROR, 'sourceCode'));
@@ -343,7 +345,12 @@ function checkIfNsfw(subreddit: string) {
 			});
 			res.on('end', function() {
 				// checking if subreddit exists
-				if (!body.includes('The resource was found at')) {
+				if (body.includes('banned') || body.includes('private')) {
+					// allow banned and private subreddits to be passed through
+					resolve(false);
+				}
+				else if (!body.includes('The resource was found at')) {
+					logger.debug(body);
 					resolve(JSON.parse(body).data.over18);
 				}
 				else {
